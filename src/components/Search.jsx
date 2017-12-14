@@ -1,4 +1,4 @@
-var Search = () => (
+const Search = () => (
   <div className="search-bar form-inline">
     <input className="form-control" type="text" />
     <button className="btn hidden-sm-down">
