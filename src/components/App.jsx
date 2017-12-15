@@ -1,20 +1,78 @@
-var App = () => (
-  <div>
-    <nav className="navbar">
-      <div className="col-md-6 offset-md-3">
-        <Search />
+// var App = () => (
+//   <div>
+//     <nav className="navbar">
+//       <div className="col-md-6 offset-md-3">
+//         <Search />
+//       </div>
+//     </nav>
+//     <div className="row">
+//       <div className="col-md-7">
+//         <VideoPlayer videosList={exampleVideoData}/>
+//       </div>
+//       <div className="col-md-5">
+//         <VideoList videosList={exampleVideoData}/>
+//       </div>
+//     </div>
+//   </div>
+// );
+
+class App extends React.Component {
+  constructor (props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+    this.state = {
+      videos: window.exampleVideoData,
+      currentVideo: window.exampleVideoData[0]};
+  }
+  
+  handleClick (clickedVideo) {
+    this.setState({
+      currentVideo: clickedVideo
+    });
+  }
+  
+  componentDidMount() {
+    this.getYouTubeVideos('test string');
+  }
+  
+  getYouTubeVideos(query) {
+    var options = {
+      key: this.props.API_KEY,
+      query: query
+    };
+    
+    this.props.searchYouTube(options, (videos) =>{
+      this.setState({
+        videos: videos,
+        currentVideo: videos[0]
+      });
+    });
+  }
+  
+ 
+  
+  render() {
+    return ( 
+      <div>
+        <nav handleSearchInputChange={this.getYouTubeVideos.bind(this)}/>
+        <nav className="navbar">
+          <div className="col-md-6 offset-md-3">
+            <Search />
+          </div>
+        </nav>
+        <div className="row">
+          <div className="col-md-7">
+            <VideoPlayer videosList={this.state.currentVideo} handleClick={this.handleClick} passedVideo={this.currentVideo} state={this.state}/>
+          </div>
+          <div className="col-md-5">
+            <VideoList handleClick={this.handleClick} videosList={this.state.videos}/>
+          </div>
+        </div>
       </div>
-    </nav>
-    <div className="row">
-      <div className="col-md-7">
-        <VideoPlayer videosList={exampleVideoData}/>
-      </div>
-      <div className="col-md-5">
-        <VideoList videosList={exampleVideoData}/>
-      </div>
-    </div>
-  </div>
-);
+    );
+  } 
+}
+
 
 
 // In the ES6 spec, files are "modules" and do not share a top-level scope
